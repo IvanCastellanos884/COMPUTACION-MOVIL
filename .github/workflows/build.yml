@@ -1,28 +1,19 @@
 name: Build
-
 on:
   push:
     branches:
       - main
-
+  pull_request:
+    types: [opened, synchronize, reopened]
 jobs:
-  build:
-    name: Build and analyze
-    runs-on: ubuntu-latest 
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v1
-        with:
-          projectBaseDir: .
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
-          SONAR_TOKEN: sqp_902dbadbc0e349f2de9be0611c77977cb9425113
-          SONAR_HOST_URL: http://localhost:9000
-
-      # - name: Quality Gate
-      #   uses: SonarSource/sonarqube-quality-gate-action@v1
-      #   env:
-      #     SONAR_TOKEN: sqp_902dbadbc0e349f2de9be0611c77977cb9425113
+          SONAR_TOKEN: 64f3777fb2899d824754e9bb25feb1a5d0134ab4
