@@ -8,12 +8,11 @@ on:
 jobs:
   build:
     name: Build and analyze
-    runs-on: windows-latest
-
+    runs-on: ubuntu-latest 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Mejora la relevancia del análisis
+          fetch-depth: 0
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v1
@@ -23,7 +22,6 @@ jobs:
           SONAR_TOKEN: sqp_902dbadbc0e349f2de9be0611c77977cb9425113
           SONAR_HOST_URL: http://localhost:9000
 
-      # Si deseas que falle el workflow si el Quality Gate está en rojo, descomenta esto:
       # - name: Quality Gate
       #   uses: SonarSource/sonarqube-quality-gate-action@v1
       #   env:
