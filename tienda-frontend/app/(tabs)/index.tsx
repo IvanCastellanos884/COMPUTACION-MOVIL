@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Link } from 'expo-router';
 import { useCart } from './_layout';
 
@@ -45,16 +45,19 @@ const HomePage = () => {
     addToCart(product);
   };
 
-  return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Catálogo de Productos</Text>
-      {message ? <Text style={styles.message}>{message}</Text> : null}
-      {isLoading ? (
+  // ✅ Función que reemplaza el ternario anidado
+  const renderContent = () => {
+    if (isLoading) {
+      return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#3B82F6" />
           <Text style={styles.loadingText}>Cargando productos...</Text>
         </View>
-      ) : products.length > 0 ? (
+      );
+    }
+
+    if (products.length > 0) {
+      return (
         <View style={styles.productGrid}>
           {products.map(product => (
             <View key={product._id} style={styles.productCard}>
@@ -76,9 +79,17 @@ const HomePage = () => {
             </View>
           ))}
         </View>
-      ) : (
-        <Text style={styles.noProductsText}>No hay productos disponibles.</Text>
-      )}
+      );
+    }
+
+    return <Text style={styles.noProductsText}>No hay productos disponibles.</Text>;
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Catálogo de Productos</Text>
+      {message ? <Text style={styles.message}>{message}</Text> : null}
+      {renderContent()}
     </ScrollView>
   );
 };
@@ -169,3 +180,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomePage;
+
