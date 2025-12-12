@@ -74,8 +74,13 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const TabBarIcon = ({ name, color }: { name: any; color: string }) => (
-  <FontAwesome5 size={20} style={{ marginBottom: -3 }} name={name} color={color} />
+// ✅ Componente extraído fuera de AppLayout
+const CartButton = () => (
+  <Link href="/cart" asChild>
+    <TouchableOpacity style={styles.headerRightContainer}>
+      <FontAwesome5 size={20} style={{ marginBottom: -3 }} name="shopping-cart" color="#3B82F6" />
+    </TouchableOpacity>
+  </Link>
 );
 
 const AppLayout = () => {
@@ -86,26 +91,14 @@ const AppLayout = () => {
           name="index"
           options={{
             title: 'Tienda de Ropa',
-            headerRight: () => (
-              <Link href="/cart" asChild>
-                <TouchableOpacity style={styles.headerRightContainer}>
-                  <TabBarIcon name="shopping-cart" color="#3B82F6" />
-                </TouchableOpacity>
-              </Link>
-            ),
+            headerRight: () => <CartButton />, // ✅ Usar componente externo
           }}
         />
         <Stack.Screen
           name="[id]"
           options={{
             title: 'Detalles del Producto',
-            headerRight: () => (
-              <Link href="/cart" asChild>
-                <TouchableOpacity style={styles.headerRightContainer}>
-                  <TabBarIcon name="shopping-cart" color="#3B82F6" />
-                </TouchableOpacity>
-              </Link>
-            ),
+            headerRight: () => <CartButton />, // ✅ Reutilizar componente
           }}
         />
         <Stack.Screen
@@ -126,3 +119,4 @@ const styles = StyleSheet.create({
 });
 
 export default AppLayout;
+
