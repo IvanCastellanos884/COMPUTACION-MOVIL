@@ -1,6 +1,6 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useMemo, createContext, useContext } from 'react';
 import { Stack, Link } from 'expo-router';
-import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 // Definir los tipos de datos para productos y carrito
@@ -14,7 +14,6 @@ interface Product {
   url_imagen: string;
   cantidad_en_stock: number;
 }
-
 interface CartItem {
   product: Product;
   quantity: number;
@@ -62,8 +61,14 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     return total.toFixed(2);
   };
 
+  // ✅ Memoizar el objeto de contexto
+  const value = useMemo(
+    () => ({ cart, addToCart, removeFromCart, calculateTotal }),
+    [cart]
+  );
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, calculateTotal }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );
